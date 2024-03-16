@@ -1,6 +1,6 @@
 package org.turkcell.service;
 
-import org.turkcell.Member;
+import org.turkcell.entities.Member;
 import org.turkcell.entities.Book;
 
 public interface BookService {

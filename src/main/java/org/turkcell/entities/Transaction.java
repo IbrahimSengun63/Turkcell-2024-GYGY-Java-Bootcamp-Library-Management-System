@@ -1,10 +1,6 @@
 package org.turkcell.entities;
 
-import org.turkcell.Employee;
-import org.turkcell.Member;
-
 import java.time.LocalDate;
-import java.util.Date;
 
 public class Transaction {
     private int id;

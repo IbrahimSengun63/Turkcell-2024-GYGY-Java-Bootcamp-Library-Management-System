@@ -1,4 +1,4 @@
-package org.turkcell;
+package org.turkcell.entities;
 
 public class User {
     private int id;

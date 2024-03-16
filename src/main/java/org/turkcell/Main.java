@@ -1,11 +1,11 @@
 package org.turkcell;
 
 import org.turkcell.entities.Book;
+import org.turkcell.entities.Employee;
+import org.turkcell.entities.Member;
 import org.turkcell.entities.Transaction;
 import org.turkcell.logger.BaseLogger;
-import org.turkcell.logger.DatabaseLogger;
 import org.turkcell.logger.FileLogger;
-import org.turkcell.logger.Logger;
 import org.turkcell.repository.TransactionRepositoryImpl;
 import org.turkcell.service.BookService;
 import org.turkcell.service.BookServiceImpl;

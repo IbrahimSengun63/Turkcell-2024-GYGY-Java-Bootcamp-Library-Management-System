@@ -1,6 +1,4 @@
-package org.turkcell;
-
-import org.turkcell.entities.Transaction;
+package org.turkcell.entities;
 
 import java.util.List;
 
