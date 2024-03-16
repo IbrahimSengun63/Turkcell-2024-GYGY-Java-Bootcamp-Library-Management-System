@@ -8,15 +8,6 @@ public class Member extends User{
     private List<Book> books;
     private int debt;
 
-    public Member() {
-
-    }
-
-    public Member(List<Book> books, int debt) {
-        this.books = books;
-        this.debt = debt;
-    }
-
     public Member(int id, String name, List<Book> books, int debt) {
         super(id, name);
         this.books = books;
