@@ -10,26 +10,23 @@ import org.turkcell.repository.TransactionRepository;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class BookServiceImpl implements BookService {
 
     BaseLogger logger;
-    Transaction transaction;
+    private Transaction transaction;
     Employee employee;
-    private List<Transaction> transactions;
+    private List<Transaction> transactions = new ArrayList<Transaction>();
     TransactionRepository transactionRepository;
 
-    public BookServiceImpl(BaseLogger logger, Transaction transaction, Employee employee, TransactionRepository transactionRepository) {
+    public BookServiceImpl(Employee employee,BaseLogger logger, TransactionRepository transactionRepository) {
         this.logger = logger;
-        this.transaction = transaction;
         this.employee = employee;
         this.transactionRepository = transactionRepository;
     }
-
-
-
 
 
     @Override
@@ -41,7 +38,7 @@ public class BookServiceImpl implements BookService {
         String operation = "Book Register";
         LocalDate startDate = LocalDate.now();
         LocalDate endDate = startDate.plusDays(5);
-        transaction = new Transaction(
+        this.transaction = new Transaction(
                 rand.nextInt(50) * book.getId(),
                 member,
                 employee,
@@ -50,21 +47,12 @@ public class BookServiceImpl implements BookService {
                 endDate,
                 operation
         );
-        employee.getTransactions().add(transaction);
-        transactions.add(transaction);
+        employee.getTransactions().add(this.transaction);
+        this.transactions.add(this.transaction);
         book.setStatus(false);
         member.getBooks().add(book);
-        transactionRepository.registerBookBorrowing(transaction);
-
-        /*
-        logger.logMessage("Member requesting a book borrowing");
-        //business logic
-        if(!book.getStatus()) {
-            logger.logMessage("Requested book is not available");
-        } else {
-            transactionRepository.registerBookBorrowing(member, book);
-        }
-        */
+        transactionRepository.registerBookBorrowing(this.transaction);
+        logger.logMessage("Database registration completed");
     }
 
     @Override
@@ -73,30 +61,30 @@ public class BookServiceImpl implements BookService {
 
 
         //find the transaction
-        for (Transaction t : transactions) {
-            if (book.getName() == t.getBook().getName()) {
-                transaction = t;
+        for (Transaction t : this.transactions) {
+            if (book.getId() == t.getBook().getId()) {
+                this.transaction = t;
                 break;
             } else {
-                transaction = null;
+                this.transaction = null;
                 break;
             }
 
         }
-        if (transaction == null) {
+        if (this.transaction == null) {
             logger.logMessage("Book return request from " + member.getName() + " denied by system, there is no registration on the database");
         } else {
-            logger.logMessage("Book return request from " + member.getName() + " handled by " + transaction.getEmployee());
+            logger.logMessage("Book return request from " + member.getName() + " handled by " + this.transaction.getEmployee());
             int debt = 0;
             LocalDate returnTime = LocalDate.now();
-            long days = ChronoUnit.DAYS.between(transaction.getEndDate(), returnTime);
+            long days = ChronoUnit.DAYS.between(this.transaction.getEndDate(), returnTime);
 
             //late
             if (days < 0) {
                 debt = 5;
-                logger.logMessage(debt + " Penalty issued to the member " + transaction.getMember() + "for returning book " + days + "late");
+                logger.logMessage(debt + " Penalty issued to the member " + this.transaction.getMember() + "for returning book " + days + "late");
             } else {
-                logger.logMessage("Book return request from " + member.getName() + " handled by and approved by" + transaction.getEmployee());
+                logger.logMessage("Book return request from " + member.getName() + " handled by and approved by" + this.transaction.getEmployee());
             }
 
             String operation = "Book Return";
@@ -105,9 +93,9 @@ public class BookServiceImpl implements BookService {
             Transaction newTransaction = new Transaction(
                     rand.nextInt(50) * book.getId(),
                     member,
-                    transaction.getEmployee(),
+                    this.transaction.getEmployee(),
                     book,
-                    transaction.getStartDate(),
+                    this.transaction.getStartDate(),
                     returnTime,
                     operation
             );
@@ -116,17 +104,11 @@ public class BookServiceImpl implements BookService {
             member.getBooks().remove(book);
             member.setDebt(debt);
             employee.getTransactions().add(newTransaction);
-            transactions.add(newTransaction);
+            this.transactions.add(newTransaction);
             transactionRepository.registerBookReturning(newTransaction);
+            logger.logMessage("Database registration completed");
         }
 
-        /*
-        logger.logMessage("Member request a book returning");
-        if (book.getStatus()) {
-            logger.logMessage("Member doesn't hold the book, book already returned");
-        } else {
-            transactionRepository.registerBookReturning(member, book);
-        }
-        */
+
     }
 }
