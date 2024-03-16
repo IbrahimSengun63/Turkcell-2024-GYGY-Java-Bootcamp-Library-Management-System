@@ -5,9 +5,6 @@ public class Book {
     private String name;
     private Boolean status;
 
-    public Book() {
-    }
-
     public Book(int id, String name, Boolean status) {
         this.id = id;
         this.name = name;

@@ -63,7 +63,7 @@ public class BookServiceImpl implements BookService {
         member.getBooks().add(book);
 
         //transfer transaction to the repository layer and save transaction to the database
-        transactionRepository.registerBookBorrowing(this.transaction);
+        transactionRepository.saveBookRental(this.transaction);
         logger.logMessage("Database registration completed");
     }
 
@@ -136,7 +136,7 @@ public class BookServiceImpl implements BookService {
             this.transactions.add(newTransaction);
 
             //transfer the transaction to the repository layer, and save to the database
-            transactionRepository.registerBookReturning(newTransaction);
+            transactionRepository.updateBookRental(newTransaction);
 
             //inform database save
             logger.logMessage("Database registration completed");

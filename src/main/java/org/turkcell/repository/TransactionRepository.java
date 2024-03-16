@@ -3,6 +3,6 @@ package org.turkcell.repository;
 import org.turkcell.entities.Transaction;
 
 public interface TransactionRepository {
-    void registerBookBorrowing(Transaction transaction);
-    void registerBookReturning(Transaction transaction);
+    void saveBookRental(Transaction transaction);
+    void updateBookRental(Transaction transaction);
 }

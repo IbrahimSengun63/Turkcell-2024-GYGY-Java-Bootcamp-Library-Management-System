@@ -11,9 +11,6 @@ public class Transaction {
     private LocalDate endDate;
     private String operation;
 
-    public Transaction() {
-    }
-
     public Transaction(int id, Member member, Employee employee, Book book, LocalDate startDate, LocalDate endDate, String operation) {
         this.id = id;
         this.member = member;
